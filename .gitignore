@@ -1,0 +1,12 @@
+__pycache__/
+*.py[co]
+* copy.*
+.DS_Store
+*~lock.*
+*.swp
+*.swo
+*~
+run
+runs
+*sqlite3
+local_settings.py
