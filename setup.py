@@ -11,8 +11,8 @@ setup(
 #    include_package_data = True,
     install_requires =
     [
-        'Django==1.8'
-        'django-bootstrap-form==3.2'
+        'Django==1.8',
+        'django-bootstrap-form==3.2',
     ],
     packages=find_packages(),
     test_suite = "BeerFest",
