@@ -1,0 +1,6 @@
+setup.py
+BeerFest.egg-info/PKG-INFO
+BeerFest.egg-info/SOURCES.txt
+BeerFest.egg-info/dependency_links.txt
+BeerFest.egg-info/requires.txt
+BeerFest.egg-info/top_level.txt

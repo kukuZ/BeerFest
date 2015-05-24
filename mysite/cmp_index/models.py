@@ -32,7 +32,7 @@ class Category(models.Model):
     
 class Commodity(models.Model):
     """比較対象オブジェクトクラス"""
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, related_name='commodities')
     name = models.CharField(max_length=255)
     attribute = models.CharField(max_length=255)
     id_attr = models.IntegerField()

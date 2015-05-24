@@ -33,6 +33,7 @@ table {
           <td>
             <a href="{% url 'cmp_index:category_mod' category_id=category.id %}" class="btn btn-default btn-sm">修正</a>
             <a href="{% url 'cmp_index:category_del' category_id=category.id %}" class="btn btn-default btn-sm">削除</a>
+            <a href="{% url 'cmp_index:commodity_list' category_id=category.id %}" class="btn btn-default btn-sm btn-primary">比較対象の一覧</a>
           </td>
         </tr>
         {% endfor %}
