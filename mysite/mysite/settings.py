@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cmp_index',
+    'cmp',
     'bootstrapform',  # django-bootstrap-form
 )
 
