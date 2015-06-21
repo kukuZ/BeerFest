@@ -6,9 +6,9 @@
 {% block content %}
     <h3 class="page-header">カテゴリの編集</h3>
     {% if category_id %}
-    <form action="{% url 'cmp_index:category_mod' category_id=category_id %}" method="post" class="form-horizontal" role="form">
+    <form action="{% url 'cmp:category_mod' category_id=category_id %}" method="post" class="form-horizontal" role="form">
     {% else %}
-    <form action="{% url 'cmp_index:category_add' %}" method="post" class="form-horizontal" role="form">
+    <form action="{% url 'cmp:category_add' %}" method="post" class="form-horizontal" role="form">
     {% endif %}
       {% csrf_token %}
       {{ form|bootstrap_horizontal }}
@@ -18,5 +18,5 @@
         </div>
       </div>
     </form>
-    <a href="{% url 'cmp_index:category_list' %}" class="btn btn-default btn-sm">戻る</a>
+    <a href="{% url 'cmp:category_list' %}" class="btn btn-default btn-sm">戻る</a>
 {% endblock content %}

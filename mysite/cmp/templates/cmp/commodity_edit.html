@@ -6,9 +6,9 @@
 {% block content %}
     <h3 class="page-header">比較対象の編集</h3>
     {% if commodity_id %}
-    <form action="{% url 'cmp_index:commodity_mod' category_id=category_id commodity_id=commodity_id %}" method="post" class="form-horizontal" role="form">
+    <form action="{% url 'cmp:commodity_mod' category_id=category_id commodity_id=commodity_id %}" method="post" class="form-horizontal" role="form">
     {% else %}
-    <form action="{% url 'cmp_index:commodity_add' category_id=category_id %}" method="post" class="form-horizontal" role="form">
+    <form action="{% url 'cmp:commodity_add' category_id=category_id %}" method="post" class="form-horizontal" role="form">
     {% endif %}
       {% csrf_token %}
       {{ form|bootstrap_horizontal }}
@@ -18,5 +18,5 @@
         </div>
       </div>
     </form>
-    <a href="{% url 'cmp_index:commodity_list' category_id=category_id %}" class="btn btn-default btn-sm">戻る</a>
+    <a href="{% url 'cmp:commodity_list' category_id=category_id %}" class="btn btn-default btn-sm">戻る</a>
 {% endblock content %}

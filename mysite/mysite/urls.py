@@ -8,4 +8,5 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cmp_index/', include('cmp_index.urls', namespace='cmp_index')),
+    url(r'^cmp/', include('cmp.urls', namespace='cmp')),
 ]
