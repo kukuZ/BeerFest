@@ -7,7 +7,8 @@ from django.views.generic.list import ListView
 def p_category_list(request):
     '''親カテゴリ一覧'''
     #return HttpResponse('カテゴリ')
-    p_categories = P_Category.objects.all().order_by('id')
+#    p_categories = P_Category.objects.all().order_by('id')
+    p_categories = P_Category.objects.filter(last_flg=1).order_by('name')
     return render_to_response('cmp_index/p_categories_list.html',  # 使用するテンプレート
                                 {'p_categories': p_categories},       # テンプレートに渡すデータ
                                 context_instance=RequestContext(request))  # その他標準のコンテキスト

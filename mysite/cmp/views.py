@@ -2,11 +2,20 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.template import RequestContext
-from cmp.models import Category
+from cmp.models import Category, Commodity
 from cmp.forms import CommodityForm
+from cmp.forms import CategoryForm
 from django.views.generic.list import ListView
 
-def category_list(ListView):
+class CommodityFullSet(Commodity):
+    """カテゴリ毎の各商品の評価観点と特典のグラフ用データ作成クラス"""
+    def scor_calc(self, category):
+        self.commodities = category[0].commodities.all() #カテゴリのリレーション先商品を取得(related_name=commodities)
+        self.components = category[0].components.all() #カテゴリのリレーション先構成要素を取得(related_name=components)
+
+
+
+def category_list(request, cate):
     '''親カテゴリ一覧'''
     #return HttpResponse('カテゴリ')
     model = Article
@@ -14,6 +23,21 @@ def category_list(ListView):
     return render_to_response('cmp_index/categories_list.html',  # 使用するテンプレート
                                 {'categories': categories},       # テンプレートに渡すデータ
                                 context_instance=RequestContext(request))  # その他標準のコンテキスト
+
+def category_inf(request, category_id):
+    '''カテゴリ情報'''
+    #return HttpResponse('カテゴリ')
+    category = Category.objects.filter(link_id=category_id)  # 親カテゴリ取得
+    #components = category[0].components.all() #カテゴリのリレーション先構成要素を取得(related_name=components)
+    commodities = category[0].commodities.all() #カテゴリのリレーション先商品を取得(related_name=commodities)
+    for i in range(len(commodities)):
+        #商品ごとの属性とその構成を取得し、インスタンスとして追加する
+        commodities[i].attrscore_get()
+
+    return render_to_response('cmp/categories_list.html',  # 使用するテンプレート
+                                {'category': category[0], 'commodities':commodities, 'components':components[0],},       # テンプレートに渡すデータ
+                                context_instance=RequestContext(request))  # その他標準のコンテキスト
+
 
 def category_edit(request, category_id=None):
     '''カテゴリの編集'''
@@ -29,13 +53,13 @@ def category_edit(request, category_id=None):
         if form.is_valid():    # フォームのバリデーション
             category = form.save(commit=False)
             category.save()
-            return redirect('cmp_index:category_list')
+            return redirect('cmp:category_list')
 
     elif request.method == 'GET':
         ''' GET '''
         form = CategoryForm(instance=category)  # category インスタンスからフォームを作成
 
-    return render_to_response('cmp_index/category_edit.html',
+    return render_to_response('cmp/category_edit.html',
                               dict(form=form, category_id=category_id),
                               context_instance=RequestContext(request))
 

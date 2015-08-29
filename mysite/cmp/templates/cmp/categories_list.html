@@ -11,30 +11,21 @@ table {
 {% endblock %}
 
 {% block content %}
-    <h3 class="page-header">カテゴリ</h3>
-    <a href="{% url 'cmp:category_add' %}" class="btn btn-default btn-sm">追加</a>
+<h3 class="page-header">{{ category.name }}</h3>
     <table class="table table-striped table-bordered">
       <thead>
         <tr>
-          <th>ID</th>
           <th>カテゴリ</th>
-          <th>閲覧数</th>
-          <th>比較実施数</th>
-          <th>操作</th>
+          <th>name</th>
+          <th>text</th>
         </tr>
       </thead>
       <tbody>
-        {% for category in categories %}
+        {% for commodity in commodities %}
         <tr>
-          <td>{{ category.id }}</td>
-          <td>{{ category.name }}</td>
-          <td>{{ category.num_viewer }}</td>
-          <td>{{ bbookook.num_compared }}</td>
-          <td>
-            <a href="{% url 'cmp:category_mod' category_id=category.id %}" class="btn btn-default btn-sm">修正</a>
-            <a href="{% url 'cmp:category_del' category_id=category.id %}" class="btn btn-default btn-sm">削除</a>
-            <a href="{% url 'cmp:commodity_list' category_id=category.id %}" class="btn btn-default btn-sm btn-primary">比較対象の一覧</a>
-          </td>
+          <td>{{ commodity.category }}</td>
+          <td>{{ commodity.name }}</td>
+          <td>{{ commodity.text }}</td>
         </tr>
         {% endfor %}
       </tbody>

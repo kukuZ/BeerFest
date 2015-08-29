@@ -21,9 +21,8 @@ table {
       <tbody>
         {% for p_category in p_categories %}
         <tr>
-          <td>{{ p_category.name }}</td>
           <td>
-              {#            <a href="{% url 'cmp:category_list' p_category_id=p_category.id %}">{{ p_category.name }}</a>#}
+              <a href="{% url 'cmp:category_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a>
           </td>
         </tr>
         {% endfor %}

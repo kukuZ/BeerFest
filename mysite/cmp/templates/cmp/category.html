@@ -1,0 +1,35 @@
+
+
+{% block title %}カテゴリ{% endblock title %}
+
+{% block extrahead %}
+<style>
+table {
+  margin-top: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+    <h3 class="page-header">カテゴリ</h3>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>カテゴリ</th>
+          <th>text</th>
+          <th>閲覧数</th>
+          <th>商品数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ category.name }}</td>
+          <td>{{ category.text }}</td>
+          <td>{{ category.num_viewer }}</td>
+          <td>{{ category.commodity_num }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock content %}
+
