@@ -41,7 +41,7 @@ class Commodity(models.Model):
         components = self.category.components.all() #カテゴリのリレーション先構成要素を取得(related_name=components)
         self.components = components[0]
         self.attributes = self.attribute.all().order_by('id') #商品のリレーション先属性を取得(related_name=commodities)
-        for attribute in attributes:
+        for attribute in self.attributes:
             #AttributeのScoresetを取得してスコアを算出する
             attribute.score_calc()
 
