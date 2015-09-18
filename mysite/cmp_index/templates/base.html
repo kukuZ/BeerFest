@@ -5,12 +5,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>{% block title %}Cmp index{% endblock %}</title>
-
+        {% comment %}
         <!-- Bootstrap CSS -->
         <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'css/bootstrap-theme.min.css' %}" rel="stylesheet">
-
+        {% endcomment %}
         <!-- Custom styles for this page -->
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
@@ -18,48 +17,48 @@
         <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
+
         {% block extrahead %}{% endblock %}
     </head>
 
     <body>
-    <header id="header" class="top_header navbar navbar-default navbar-fixed-top" role="banner">
-        <div class="container">
-            <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <h1 class="navbar-header">
-                <a href="/" class="navbar-brand"><img src="images/header_logo.png" height="40" width="92" alt="LOGO"></a>
-            </h1><!-- /.navbar-header -->
-            <nav class="navbar-collapse collapse" id="navigation" role="navigation">
-                <ul class="nav navbar-nav">
-                    <li><a href="#">TOP</a></li>
-                    <li><a href="#">PICK UP</a></li>
-                    <li><a href="#">INFO</a></li>
-                    <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">CATEGORY<span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">BEER</a></li>
-                        <li><a href="#">FOODS</a></li>
-                    </ul><!-- /.dro-down-menu -->
-                    </li><!-- /.dropdown -->
-                </ul><!-- /.nav -->
-                <form class="navbar-form" role="search">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="keyword">
-                        <span class="input-group-btn"><button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button></span>
-                    </div><!-- /.input-group -->
-                </form>
-            </nav><!-- /.navbar-collapse -->
-        </div><!-- /.container -->
-    </header><!-- /.navbar -->
+        <header id="header" class="top_header navbar navbar-default navbar-fixed-top" role="banner">
+            <div class="container">
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <h1 class="navbar-header">
+                    <a href="/" class="navbar-brand"><img src="images/header_logo.png" height="40" width="92" alt="LOGO"></a>
+                </h1><!-- /.navbar-header -->
+                <nav class="navbar-collapse collapse" id="navigation" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">TOP</a></li>
+                        <li><a href="#">PICK UP</a></li>
+                        <li><a href="#">INFO</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">CATEGORY<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">BEER</a></li>
+                                <li><a href="#">FOODS</a></li>
+                            </ul><!-- /.dro-down-menu -->
+                        </li><!-- /.dropdown -->
+                    </ul><!-- /.nav -->
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="keyword">
+                            <span class="input-group-btn"><button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button></span>
+                        </div><!-- /.input-group -->
+                    </form>
+                </nav><!-- /.navbar-collapse -->
+            </div><!-- /.container -->
+        </header><!-- /.navbar -->
 
-    <div class="container">
         {% block content %}
         {{ content }}
         {% endblock %}
-    </div>
+        </div>
     </body>
-    </html>
+</html>

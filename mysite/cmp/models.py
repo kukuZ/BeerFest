@@ -68,9 +68,9 @@ class Attribute(models.Model):
         """AttributeのScoresetを取得してスコアを算出する"""
         total_vots = 0
         score = 0
-        scoresets1 = self.obj1s_attr_for_score.all() #商品の属性のリレーションのスコアセット取得(related_name=obj1s_attr_for_score)
 
         #総比較数を算出
+        scoresets1 = self.obj1s_attr_for_score.all() #商品の属性のリレーションのスコアセット取得(related_name=obj1s_attr_for_score)
         for scoreset in scoresets1:
             total_vots = total_vots + scoreset.attr1_score + scoreset.attr2_score
         scoresets2 = self.obj2s_attr_for_score.all() #商品の属性のリレーションのスコアセット取得(related_name=obj2s_attr_for_score)
@@ -79,10 +79,19 @@ class Attribute(models.Model):
 
         #総比較数に占める対象となる組み合わせの比較数が多ければより信頼度が高いとし、その割合に応じて、組み合わせの比較で勝ち取った票をスコア化する
         for scoreset in scoresets1:
-            score = score + (scoreset.attr1_score / (scoreset.attr1_score + scoreset.attr2_score)) * ((scoreset.attr1_score + scoreset.attr2_score) / total_vots)
+            try:
+                score = score + (scoreset.attr1_score / (scoreset.attr1_score + scoreset.attr2_score)) * ((scoreset.attr1_score + scoreset.attr2_score) / total_vots)
+                break
+            except ZeroDivisionError:
+                score = score + 0
 
         for scoreset in scoresets2:
-            score = score + (scoreset.attr2_score / (scoreset.attr1_score + scoreset.attr2_score)) * ((scoreset.attr1_score + scoreset.attr2_score) / total_vots)
+            try:
+                score = score + (scoreset.attr2_score / (scoreset.attr1_score + scoreset.attr2_score)) * ((scoreset.attr1_score + scoreset.attr2_score) / total_vots)
+                break
+            except ZeroDivisionError:
+                score = score + 0
+
         #socreのMAX値は10とする
         score = int(score * 10)
         #self.attributesにscoreインスタンスを追加する

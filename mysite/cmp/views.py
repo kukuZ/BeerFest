@@ -35,7 +35,7 @@ def category_inf(request, category_id):
         commodities[i].attrscore_get()
 
     return render_to_response('cmp/categories_list.html',  # 使用するテンプレート
-                                {'category': category[0], 'commodities':commodities, 'components':components[0],},       # テンプレートに渡すデータ
+                                {'category': category[0], 'commodities':commodities,},       # テンプレートに渡すデータ
                                 context_instance=RequestContext(request))  # その他標準のコンテキスト
 
 

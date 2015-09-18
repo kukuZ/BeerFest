@@ -4,31 +4,31 @@
 
 {% block extrahead %}
 <style>
-table {
-  margin-top: 8px;
-}
+    table {
+        margin-top: 400px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <h3 class="page-header">{{ category.name }}</h3>
-    <table class="table table-striped table-bordered">
-      <thead>
+<table class="table table-striped table-bordered">
+    <thead>
         <tr>
-          <th>カテゴリ</th>
-          <th>name</th>
-          <th>text</th>
+            <th>カテゴリ</th>
+            <th>name</th>
+            <th>text</th>
         </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
         {% for commodity in commodities %}
         <tr>
-          <td>{{ commodity.category }}</td>
-          <td>{{ commodity.name }}</td>
-          <td>{{ commodity.text }}</td>
+            <td>{{ commodity.category }}</td>
+            <td>{{ commodity.name }}</td>
+            <td>{{ commodity.text }}</td>
         </tr>
         {% endfor %}
-      </tbody>
-    </table>
+    </tbody>
+</table>
 {% endblock content %}
 
