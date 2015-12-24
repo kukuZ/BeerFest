@@ -39,6 +39,83 @@ def category_inf(request, category_id):
                                 context_instance=RequestContext(request))  # その他標準のコンテキスト
 
 
+
+def commodity_cmp_make(request, category_id, cmmodity_id, commodity_B_idx):
+    '''商品比較用のページ作成'''
+    '''指定商品（A)と比較された回数が少ない商品（B)を取得し、属性ごとに出力させてく'''
+    '''Bとなる商品が道標であるなら、トータルの回数が少ない商品を選択する'''
+    #指定されたカテゴリを取得（商品の属するカテゴリ）
+    category = Category.objects.get(id=category_id)  # 親カテゴリ取得
+
+    commodity_Bs = category.commodities.all() #カテゴリのリレーション先商品を取得(related_name=commodities)
+
+    #指定商品（A）を取得
+    commodity_A = Commodity.objects.get(id=cmmodity_id)
+    """
+    chk_flg = 0
+    for commodity in commodity_Bs:
+        if(commodity.id == cmmodity_id):
+            commodity_A = commodity
+            chk_flg = 1
+            break
+    if(chk_flg == 0):
+        #エラー：どうしよう
+        return
+    """
+
+    #商品カテゴリが持つ属性構成を取得
+    tmp_components = category.components.all()
+    components = tmp_components[0]
+
+    #商品の属性一覧を取得
+    A_attr_list = commodity_A.attribute.all()
+
+    #商品の属性からスコアセットを取得（obj1,2に適当に放り込んでるからちょっと探すの面倒）
+    A_scoreset_1 = A_attr_list.obj1s_attr_for_score.all()
+    A_scoreset_2 = A_attr_list.obj2s_attr_for_score.all()
+
+    """商品Aのスコアセットから商品Aと比較された回数が最も少ない少ない商品を探索"""
+    """そのためにスコアセットから合計の比較数が少ない順に並び替える"""
+    """その後にスコアセットに習って商品Bを順に並べる"""
+    sorted_score_set = [] #スコアセットを連結して一つのリストにする
+    sorted_score_set.extend(A_scoreset_1)
+    sorted_score_set.extend(A_scoreset_2)
+    for i in range(len(sorted_score_set) - 1):
+        for j in range(len(sorted_score_set) - 1 - j):
+            fst_score = sorted_score_set[j].attr1_score + sorted_score_set[j].attr2_score
+            scd_score = sorted_score_set[j + 1].attr1_score + sorted_score_set[j + 1].attr2_score
+            if(fst_score > scd_score):
+                #jとj+1を入れ替え
+                sorted_score_set[j],sorted_score_set[j + 1] = sorted_score_set[j + 1],sorted_score_set[j]
+
+    if(sorted_score_set[commodity_B_idx].obj1 == commodity_A):
+        commodity_B = sorted_score_set[i].obj2
+    elif(sorted_score_set[commodity_B_idx].obj1 == commodity_A):
+        commodity_B = sorted_score_set[i].obj1
+    return render_to_response('cmp/categories_listaaaa.html',  # 使用するテンプレート
+                                {'commodity_A': commodity_A, 'commodity_B':commodity_B,},       # テンプレートに渡すデータ
+                                context_instance=RequestContext(request))  # その他標準のコンテキスト
+    """
+    commoditys_sorted = []
+    for i in range(len(sorted_score_set)):
+        for j in range(len(commodity_Bs)):
+            #商品Aと対をなす商品Bを一時バッファに格納
+            if(sorted_score_set[i].obj1 == commodity_A):
+                tmp_cmmodity = sorted_score_set[i].obj2
+            elif(sorted_score_set[i].obj1 == commodity_A):
+                tmp_cmmodity = sorted_score_set[i].obj1
+            
+            #商品Bのj番目とソートされたスコアセットのリレーション元の商品が一致したので、ソート順と同じ場所に並び替える
+            if(tmp_cmmodity == commodity_Bs[j]):
+                commodity_Bs[j], commodity_Bs[i] = commodity_Bs[i], commodity_Bs[j]
+            attr_list = commodity.attribute.all()
+        #商品の属性からスコアセットを取得（obj1,2に適当に放り込んでるからちょっと探すの面倒）
+        scoreset_1 = attr_list.obj1s_attr_for_score.all()
+        scoreset_2 = attr_list.obj2s_attr_for_score.all()
+    """
+
+
+
 def category_edit(request, category_id=None):
     '''カテゴリの編集'''
 #    return HttpResponse('カテゴリ編集')
