@@ -6,7 +6,10 @@ class CommodityForm(ModelForm):
     '''比較対象のフォーム'''
     class Meta:
         model = Commodity
-        fields = ('name', )
+        fields = ('name',
+                'text',
+                'link',
+                )
 
 class CategoryForm(ModelForm):
     '''カテゴリのフォーム'''

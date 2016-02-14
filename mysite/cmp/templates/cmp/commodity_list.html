@@ -35,7 +35,10 @@ table {
           <td>{{ commodity.id }}</td>
           <td>{{ commodity.name|linebreaksbr }}</td>
           <td>
+            {% comment %}
             <a href="{% url 'cmp:commodity_mod' category_id=category.id commodity_id=category.id %}" class="btn btn-default btn-sm">修正</a>
+            {% endcomment %}
+            <a href="{% url 'cmp:commodity_add' category_id=category.id commodity_id=commodity.id %}" method="get" class="btn btn-default btn-sm">編集a</a>
             <button class="btn btn-default btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ commodity.id }}" url="{% url 'cmp:commodity_del' category_id=category.id commodity_id=commodity.id %}">削除</a>
           </td>
         </tr>
@@ -66,7 +69,9 @@ table {
     {% endif %}
 
     <div>
-      <a href="{% url 'cmp:commodity_list' %}" class="btn btn-default btn-sm">戻る</a>
+      {% comment %}
+      <a href="{% url 'cmp:commodity_inf' %}" class="btn btn-default btn-sm">戻る</a>
+      {% endcomment %}
     </div>
 
 {# 削除を確認するモーダル ダイアログ #}

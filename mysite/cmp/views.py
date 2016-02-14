@@ -134,6 +134,7 @@ def category_edit(request, category_id=None):
 
     elif request.method == 'GET':
         ''' GET '''
+        print("ZZZZZZZZZZZZZ")
         form = CategoryForm(instance=category)  # category インスタンスからフォームを作成
 
     return render_to_response('cmp/category_edit.html',
@@ -153,7 +154,7 @@ class CommodityList(ListView):
     '''比較対象の一覧'''
     context_object_name='commodities'
     template_name='cmp_index/commodity_list.html'
-    paginate_by = 2  # １ページは最大2件ずつでページングする
+    paginate_by = 10  # １ページは最大10件ずつでページングする
 
     def get(self, request, *args, **kwargs):
         category = get_object_or_404(Category, pk=kwargs['category_id'])  # 親カテゴリを読む
@@ -165,12 +166,11 @@ class CommodityList(ListView):
 
 
 def commodity_edit(request, category_id, commodity_id=None):
-    '''比較対象の編集'''
+    '''比較対象の編集:作成'''
     category = get_object_or_404(Category, pk=category_id)  # 親のカテゴリを読む
-
     if commodity_id:   # commodity_id が指定されている (修正時)
-        commodity_id = get_object_or_404(Commodity, pk=commodity_id)
-    else:               # impression_id が指定されていない (追加時)
+        commodity = get_object_or_404(Commodity, pk=commodity_id)
+    else:               # commodity_id が指定されていない (追加時)
         commodity = Commodity()
 
     if request.method == 'POST':
@@ -179,13 +179,15 @@ def commodity_edit(request, category_id, commodity_id=None):
             commodity = form.save(commit=False)
             commodity.category = category  # この商品の、親カテゴリをセット
             commodity.save()
-            return redirect('cmp_index:commodity_list', category_id=category_id)
+            #比較対象オブジェクトの生成と同時にリレーションモデルも生成
+            commodity.related_models_make()
+            return redirect('cmp:commodity_list', category_id=category_id)
     else:    # GET の時
         form = CommodityForm(instance=commodity)  # commodity インスタンスからフォームを作成
 
-    return render_to_response('cmp_index/commodity_edit.html',
-                              dict(form=form, category_id=category_id, commodity_id=commodity_id),
-                              context_instance=RequestContext(request))
+    return render_to_response('cmp/commodity_edit.html', #使用するテンプレート
+                              {'form':form, 'category_id':category_id, 'commodity_id':commodity_id}, #テンプレートに渡すデータ
+                              context_instance=RequestContext(request)) #その他標準のコンテキスト
 
 def commodity_del(request, category_id, commodity_id):
     '''比較対象の削除'''

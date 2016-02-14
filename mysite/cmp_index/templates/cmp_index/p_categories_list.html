@@ -18,19 +18,11 @@
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             {% if p_category.disp_mode1 == "push" %}
                 <h2><a href="{% url 'cmp:category_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a></h2>
-                <p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</p>
-            {% else %}
-                <h2>test!!!</h2>
-                <p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</p>
             {% endif %}
         </div><!-- col -->
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             {% if p_category.disp_mode1 == "pull" %}
                 <h2><a href="{% url 'cmp:category_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a></h2>
-                <p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</p>
-            {% else %}
-                <h2>test!!!</h2>
-                <p>iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii</p>
             {% endif %}
         </div><!-- col -->
         {% endfor %}

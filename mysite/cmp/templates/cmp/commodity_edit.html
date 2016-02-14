@@ -6,7 +6,7 @@
 {% block content %}
     <h3 class="page-header">比較対象の編集</h3>
     {% if commodity_id %}
-    <form action="{% url 'cmp:commodity_mod' category_id=category_id commodity_id=commodity_id %}" method="post" class="form-horizontal" role="form">
+    <form action="{% url 'cmp:commodity_add' category_id=category_id commodity_id=commodity_id %}" method="post" class="form-horizontal" role="form">
     {% else %}
     <form action="{% url 'cmp:commodity_add' category_id=category_id %}" method="post" class="form-horizontal" role="form">
     {% endif %}
