@@ -24,6 +24,58 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def cmp_lists_make(self, cmmodity_id):
+        """
+        入力されたIDに対して、比較対象の商品リストを取得する
+        リストは比較すべき対象（実行回数が少ない組み合わせ）で
+        ソートしたものを返す
+        IN:cmmodity_id 対象商品のID
+        RET:ret_tuple 対象商品との比較順でソートした商品群IDのタプル
+            (id, [cmp_cnt, "Commodity.name")
+        """
+        #---------------------------------
+        #対象商品を取得
+        #---------------------------------
+        commodity = self.commodities.get(id=cmmodity_id)
+        attrs = commodity.attribute.all() #商品のリレーション先属性を取得(related_name=attribute)
+
+        dict_commodities = {}
+        #---------------------------------
+        #対象商品の属性から取得するスコアセットから、
+        #実行回数が少ない組み合わせを算出しつつ商品群辞書を作成
+        #---------------------------------
+        for attr in attrs:
+            scoresets_1 = attr.obj1s_attr_for_score.all()
+            scoresets_2 = attr.obj2s_attr_for_score.all()
+            score_sets = [] #スコアセットを連結して一つのリストにする
+            score_sets.extend(scoresets_1)
+            score_sets.extend(scoresets_2)
+            #スコアセットのリストから、比較回数をカウントしつつ商品群辞書を作成する
+            for score_set in score_sets:
+                #対象商品とある商品とのある属性での比較回数を取得
+                cmp_cnt = score_set.attr1_score + score_set.attr2_score
+
+                #対象商品がobj1とobj2のどちらかを取得
+                if score_set.obj1.id == cmmodity_id:
+                    key_id = score_set.obj2.id
+                    name = score_set.obj2.name
+                else:
+                    key_id = score_set.obj1.id
+                    name = score_set.obj1.name
+
+                #辞書にすでにふくまれている商品がチェック
+                if key_id in dict_commodities:
+                    #含まれている場合は、比較回数を加算しつつ辞書を修正
+                    tmp_cmp_cnt = dict_commodities[key_id]
+                    tmp_cmp_cnt[0] = tmp_cmp_cnt[0] + cmp_cnt
+                    dict_commodities[key_id] = tmp_cmp_cnt
+                else:
+                    dict_commodities[key_id] = [cmp_cnt, name]
+        #対象商品との比較回数順でソートした商品群IDリストを作成
+        ret_tuple = sorted(dict_commodities.items(), kye=lambda x:x[1][0])
+        return ret_tuple
+
+
 class Commodity(models.Model):
     """比較対象オブジェクトクラス"""
     category = models.ForeignKey(Category, related_name='commodities')
@@ -37,22 +89,33 @@ class Commodity(models.Model):
         return self.name
 
     def attrscore_get(self):
-        """Commodityが持つ属性とその属性の構成を取得し、比較結果からスコア化する"""
-        components = self.category.components.all() #カテゴリのリレーション先構成要素を取得(related_name=components)
-        self.components = components[0]
-        self.attributes = self.attribute.all().order_by('id') #商品のリレーション先属性を取得(related_name=attribute)
-        for attribute in self.attributes:
+        """
+        Commodityが持つ属性とその属性の構成を取得し、比較結果からスコア化する
+        ret:
+            components:Commodityのリレーション：Componentsインスタンス
+            attributes:Commodityのリレーション：Attributeのインデックス
+                        Attributeインスタンスにはscoreを追加
+        """
+        components = self.category.components.get(category=self.category) #カテゴリのリレーション先構成要素を取得(related_name=components)
+        attributes = self.attribute.all().order_by('id') #商品のリレーション先属性を取得(related_name=attribute)
+        for attribute in attributes:
             #AttributeのScoresetを取得してスコアを算出する
-            attribute.score_calc()
+            attribute.score = attribute.score_calc()
+        return components, attributes
 
     def related_models_make(self):
-        """比較対象オブジェクトのリレーションモデルを生成する"""
+        """
+        比較対象オブジェクトのリレーションモデルを生成する
+        作成するのはAttributeとScoreset
+        """
         #オブジェクトの構成要素を取得
-        components_list = self.category.components.all() #カテゴリのリレーション先構成要素を取得(related_name=components)
-        attributes = components_list[0].attributes.all()
+        components = self.category.components.get(category=self.category) #カテゴリのリレーション先構成要素を取得(related_name=components)
+        attributes = components.attributes.all()
 
+        #***************************************************
         #構成要素componentsに従って、属性Attributeを生成
         #すでに生成済みAttributeをチェックしなが生成する
+        #***************************************************
         attrs = self.attribute.all() #商品のリレーション先属性を取得(related_name=attribute)
         for attr_name in attributes:
             attr = Attribute()
@@ -68,12 +131,16 @@ class Commodity(models.Model):
             if save_flg:
                 attr.save()
 
+        #***************************************************
         #scoresetを作成する
         #そのために先ずは自身が属するカテゴリの全商品を取得して
         #そのそれらの商品との組み合わせで、各属性のスコアセットを作成する
+        #***************************************************
 
+        #----------------------------------------------------
         #商品の属性からスコアセットを取得（obj1,2に適当に放り込んでるからちょっと探すの面倒）して
         #新規追加時の追加必要チェックに使用する
+        #----------------------------------------------------
         scoreset_1 = self.obj1_for_score.all()
         scoreset_2 = self.obj2_for_score.all()
 
@@ -89,9 +156,11 @@ class Commodity(models.Model):
                     if attr.attr_name != own_attr.attr_name:
                         #カテゴリのある商品のある属性と、自身のある属性が対応する場合のみ処理を実行する
                         continue
+                    #------------------------------------------
                     #Scoresetは二つの商品の組み合わせで構成されているが
                     #組み合わせの順を考慮できておらず、順が異なれば別扱いになるため
                     #scoreset_1とscoreset_2をチェックする必要がある
+                    #------------------------------------------
                     s_set = Scoreset()
                     s_set.obj1 = self
                     s_set.obj2 = commodity
@@ -140,7 +209,11 @@ class Attribute(models.Model):
         return self.name
 
     def score_calc(self):
-        """AttributeのScoresetを取得してスコアを算出する"""
+        """
+        AttributeのScoresetを取得してスコアを算出する
+        ret:
+            score:算出したスコア
+        """
         total_vots = 0
         score = 0
 
@@ -169,8 +242,8 @@ class Attribute(models.Model):
 
         #socreのMAX値は10とする
         score = int(score * 10)
-        #self.attributesにscoreインスタンスを追加する
-        self.score = score
+        #scoreを返す
+        return score
 
 
 
