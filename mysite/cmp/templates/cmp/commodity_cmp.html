@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}比較{% endblock title %}
+
+{% block extrahead %}
+<style>
+table {
+  margin-top: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h3 class="page-header">Compar!!<small>{{ category.name }}</small></h3>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=commodity_A.id commodity_B_id=commodity_B.id attributelist_id=0 skip=False cannot=False%}" class="btn btn-primary btn-lg">Compar!!</a>
+        </div><!-- col -->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=commodity_A.id commodity_B_id=commodity_B.id attributelist_id=components.attr_list.0.id skip=1 cannot=False%}" class="btn btn-primary btn-lg">Compar!!</a>
+        </div><!-- col -->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=commodity_B.id commodity_B_id=commodity_A.id attributelist_id=components.attr_list.0.id skip=False cannot=False%}" class="btn btn-primary btn-lg">Compar!!</a>
+        </div><!-- col -->
+    </div><!-- row -->
+{% endblock content %}

@@ -15,36 +15,18 @@
 <div class="container">
     <div class="row">
         {% for p_category in p_categories %}
-        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-            {% if p_category.disp_mode1 == "push" %}
-                <h2><a href="{% url 'cmp:category_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a></h2>
-            {% endif %}
-        </div><!-- col -->
-        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            {% if p_category.disp_mode1 == "pull" %}
-                <h2><a href="{% url 'cmp:category_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a></h2>
-            {% endif %}
-        </div><!-- col -->
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                {% if p_category.disp_mode1 == "push" %}
+                    <h2><a href="{% url 'cmp:commodities_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a></h2>
+                {% endif %}
+            </div><!-- col -->
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                {% if p_category.disp_mode1 == "pull" %}
+                    <h2><a href="{% url 'cmp:commodities_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a></h2>
+                {% endif %}
+            </div><!-- col -->
         {% endfor %}
     </div><!-- row -->
 </div>
-{% comment %}
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>カテゴリ</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for p_category in p_categories %}
-        <tr>
-            <td>
-                <a href="{% url 'cmp:category_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endcomment %}
 {% endblock content %}
 

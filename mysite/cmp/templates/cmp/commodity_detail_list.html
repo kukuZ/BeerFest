@@ -19,6 +19,7 @@
             <th>name</th>
             <th>text</th>
             <th>attr</th>
+            <th>操作</th>
         </tr>
     </thead>
     <tbody>
@@ -35,10 +36,13 @@
                 <br>
             {% endfor %}
             </td>
+            <td>
+                <a href="{% url 'cmp:commodity_cmp_make' category_id=category.id commodity_id=commodity.id %}" class="btn btn-warning" url="">Compar!!</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-    <a href="{% url 'cmp:commodity_list' category_id=category.id %}" class="btn btn-default btn-sm">商品編集</a>
+    <a href="{% url 'cmp:commodity_add' category_id=category.id %}" class="btn btn-default btn-sm">商品編集</a>
 {% endblock content %}
 

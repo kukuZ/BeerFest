@@ -228,6 +228,7 @@ __str__	mysite/cmp/models.py	/^    def __str__(self):$/;"	m	class:Attribute	file
 __str__	mysite/cmp/models.py	/^    def __str__(self):$/;"	m	class:AttributeList	file:
 __str__	mysite/cmp/models.py	/^    def __str__(self):$/;"	m	class:Category	file:
 __str__	mysite/cmp/models.py	/^    def __str__(self):$/;"	m	class:Commodity	file:
+__str__	mysite/cmp/models.py	/^    def __str__(self):$/;"	m	class:Components	file:
 __str__	mysite/cmp_index/models.py	/^    def __str__(self):$/;"	m	class:P_Category	file:
 _default	mysite/static/js/jquery-2.1.3.js	/^	_default: 400$/;"	p	class:jQuery.fx.speeds
 _default	mysite/static/js/jquery-2.1.3.js	/^	_default: {$/;"	p	class:Tween.propHooks
@@ -282,7 +283,6 @@ category	mysite/cmp/models.py	/^    category = models.ForeignKey(Category, relat
 category_del	mysite/cmp/views.py	/^def category_del(request, category_id):$/;"	f
 category_edit	mysite/cmp/views.py	/^def category_edit(request, category_id=None):$/;"	f
 category_id	mysite/cmp_index/models.py	/^    category_id = models.IntegerField(default=0)$/;"	v	class:P_Category
-category_inf	mysite/cmp/views.py	/^def category_inf(request, category_id):$/;"	f
 category_list	mysite/cmp/views.py	/^def category_list(request, cate):$/;"	f
 category_path	mysite/cmp_index/models.py	/^    category_path = models.CharField(max_length=255)$/;"	v	class:P_Category
 checkPosition	mysite/static/assets/javascripts/bootstrap.js	/^  Affix.prototype.checkPosition = function () {$/;"	m	class:Tab.Affix.Affix
@@ -303,9 +303,12 @@ clickHandler	mysite/static/assets/javascripts/bootstrap/carousel.js	/^  var clic
 clickHandler	mysite/static/assets/javascripts/bootstrap/tab.js	/^  var clickHandler = function (e) {$/;"	f	function:var
 clickHandler	mysite/static/js/bootstrap.js	/^  var clickHandler = function (e) {$/;"	f	function:var
 cloneCopyEvent	mysite/static/js/jquery-2.1.3.js	/^function cloneCopyEvent( src, dest ) {$/;"	f
-commodity_cmp_make	mysite/cmp/views.py	/^def commodity_cmp_make(request, category_id, cmmodity_id, commodity_B_idx):$/;"	f
+cmp_lists_make	mysite/cmp/models.py	/^    def cmp_lists_make(self, cmmodity_id):$/;"	m	class:Category
+commodity_cmp_make	mysite/cmp/views.py	/^def commodity_cmp_make(request, category_id, cmmodity_id, cmp_lists=None, cmp_lists_idx=None, cmp_cmmodity_id=None):$/;"	f
+commodity_cmp_post	mysite/cmp/views.py	/^def commodity_cmp_post(request, commodity_A_id, commodity_B_id, attributelist_id):$/;"	f
 commodity_del	mysite/cmp/views.py	/^def commodity_del(request, category_id, commodity_id):$/;"	f
 commodity_edit	mysite/cmp/views.py	/^def commodity_edit(request, category_id, commodity_id=None):$/;"	f
+commodity_inf	mysite/cmp/views.py	/^def commodity_inf(request, category_id):$/;"	f
 completed	mysite/static/js/jquery-2.1.3.js	/^function completed() {$/;"	f
 computePixelPositionAndBoxSizingReliable	mysite/static/js/jquery-2.1.3.js	/^	function computePixelPositionAndBoxSizingReliable() {$/;"	f
 constructor	mysite/static/js/jquery-2.1.3.js	/^	constructor: Tween,$/;"	p	class:Tween
@@ -652,7 +655,7 @@ optionsCache	mysite/static/js/jquery-2.1.3.js	/^var optionsCache = {};$/;"	v
 p_category_active_list	mysite/cmp_index/views.py	/^def p_category_active_list(request, index, num):$/;"	f
 p_category_list	mysite/cmp_index/views.py	/^def p_category_list(request):$/;"	f
 packages	setup.py	/^    packages=find_packages(),$/;"	v
-paginate_by	mysite/cmp/views.py	/^    paginate_by = 2  # １ページは最大2件ずつでページングする$/;"	v	class:CommodityList
+paginate_by	mysite/cmp/views.py	/^    paginate_by = 10  # １ページは最大10件ずつでページングする$/;"	v	class:CommodityList
 preserve_default	mysite/cmp_index/migrations/0002_p_category_id_ctg.py	/^            preserve_default=False,$/;"	v	class:Migration
 preserve_default	mysite/cmp_index/migrations/0005_auto_20150617_2315.py	/^            preserve_default=False,$/;"	v	class:Migration
 prev	mysite/static/assets/javascripts/bootstrap.js	/^  Carousel.prototype.prev = function () {$/;"	m	class:Carousel.Carousel.Carousel.Carousel
