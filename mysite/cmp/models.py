@@ -29,9 +29,9 @@ class Category(models.Model):
         入力されたIDに対して、比較対象の商品リストを取得する
         リストは比較すべき対象（実行回数が少ない組み合わせ）で
         ソートしたものを返す
-        IN:cmmodity_id 対象商品のID
+        IN: [int] cmmodity_id 対象商品のID
         RET:ret_tuple 対象商品との比較順でソートした商品群IDのタプル
-            (id, [cmp_cnt, "Commodity.name")
+            (id, [cmp_cnt, "Commodity.name"])
         """
         #---------------------------------
         #対象商品を取得
@@ -44,7 +44,6 @@ class Category(models.Model):
         #対象商品の属性から取得するスコアセットから、
         #実行回数が少ない組み合わせを算出しつつ商品群辞書を作成
         #---------------------------------
-        print(len(attrs))
         for attr in attrs:
             scoresets_1 = attr.obj1s_attr_for_score.all()
             scoresets_2 = attr.obj2s_attr_for_score.all()
@@ -52,7 +51,6 @@ class Category(models.Model):
             score_sets.extend(scoresets_1)
             score_sets.extend(scoresets_2)
             #スコアセットのリストから、比較回数をカウントしつつ商品群辞書を作成する
-            print(len(score_sets))
             for score_set in score_sets:
                 #対象商品とある商品とのある属性での比較回数を取得
                 cmp_cnt = score_set.attr1_score + score_set.attr2_score

@@ -304,11 +304,11 @@ clickHandler	mysite/static/assets/javascripts/bootstrap/tab.js	/^  var clickHand
 clickHandler	mysite/static/js/bootstrap.js	/^  var clickHandler = function (e) {$/;"	f	function:var
 cloneCopyEvent	mysite/static/js/jquery-2.1.3.js	/^function cloneCopyEvent( src, dest ) {$/;"	f
 cmp_lists_make	mysite/cmp/models.py	/^    def cmp_lists_make(self, cmmodity_id):$/;"	m	class:Category
-commodity_cmp_make	mysite/cmp/views.py	/^def commodity_cmp_make(request, category_id, cmmodity_id, cmp_lists=None, cmp_lists_idx=None, cmp_cmmodity_id=None):$/;"	f
-commodity_cmp_post	mysite/cmp/views.py	/^def commodity_cmp_post(request, commodity_A_id, commodity_B_id, attributelist_id):$/;"	f
+commodities_inf	mysite/cmp/views.py	/^def commodities_inf(request, category_id):$/;"	f
+commodity_cmp_make	mysite/cmp/views.py	/^def commodity_cmp_make(request, category_id, commodity_id, cmp_lists=None, cmp_lists_idx=None, cmp_cmmodity_id=None):$/;"	f
+commodity_cmp_post	mysite/cmp/views.py	/^def commodity_cmp_post(request, commodity_A_id, commodity_B_id, attributelist_id, skip=False, cannot=False):$/;"	f
 commodity_del	mysite/cmp/views.py	/^def commodity_del(request, category_id, commodity_id):$/;"	f
 commodity_edit	mysite/cmp/views.py	/^def commodity_edit(request, category_id, commodity_id=None):$/;"	f
-commodity_inf	mysite/cmp/views.py	/^def commodity_inf(request, category_id):$/;"	f
 completed	mysite/static/js/jquery-2.1.3.js	/^function completed() {$/;"	f
 computePixelPositionAndBoxSizingReliable	mysite/static/js/jquery-2.1.3.js	/^	function computePixelPositionAndBoxSizingReliable() {$/;"	f
 constructor	mysite/static/js/jquery-2.1.3.js	/^	constructor: Tween,$/;"	p	class:Tween
