@@ -4,9 +4,10 @@
 
 {% block extrahead %}
 <style>
-table {
-  margin-top: 8px;
-}
+    table
+    {
+        margin-top: 20px;
+    }
 </style>
 {% endblock %}
 
@@ -15,16 +16,17 @@ table {
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            <p>{{ commodity_A.name }}</p>
-            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=commodity_A.id commodity_B_id=commodity_B.id attributelist_id=components.attr_list.0.id vote="commodity_A" cmp_lists=cmp_lists pre_cmp_lists_idx=cmp_lists_idx%}" class="btn btn-primary btn-lg">This!!</a>
+            <p>{{ cmp_page.commodity_A.name }}</p>
+            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=cmp_page.commodity_A.id commodity_B_id=cmp_page.commodity_B.id attributelist_id=cmp_page.components.id vote=cmp_page.A attributelist_index=cmp_page.attributelist_index%}" class="btn btn-primary btn-lg">This!!</a>
         </div><!-- col -->
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=commodity_A.id commodity_B_id=commodity_B.id attributelist_id=components.attr_list.0.id vote="Draw" cmp_lists=cmp_lists pre_cmp_lists_idx=cmp_lists_idx%}" class="btn btn-primary btn-lg">Draw!!</a>
-            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=commodity_A.id commodity_B_id=commodity_B.id attributelist_id=components.attr_list.0.id vote="Skip" cmp_lists=cmp_lists pre_cmp_lists_idx=cmp_lists_idx%}" class="btn btn-primary btn-lg">Skip!!</a>
+            <p>{{ cmp_page.components.name }}</p>
+            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=cmp_page.commodity_A.id commodity_B_id=cmp_page.commodity_B.id attributelist_id=cmp_page.components.id vote=cmp_page.DRAW  attributelist_index=cmp_page.attributelist_index%}" class="btn btn-primary btn-lg">Draw!!</a>
+            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=cmp_page.commodity_A.id commodity_B_id=cmp_page.commodity_B.id attributelist_id=cmp_page.components.id vote=cmp_page.SKIP  attributelist_index=cmp_page.attributelist_index%}" class="btn btn-primary btn-lg">Skip!!</a>
         </div><!-- col -->
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            <p>{{ commodity_B.name }}</p>
-            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=commodity_A.id commodity_B_id=commodity_B.id attributelist_id=components.attr_list.0.id vote="commodity_B" cmp_lists=cmp_lists pre_cmp_lists_idx=cmp_lists_idx%}" class="btn btn-primary btn-lg">This!!</a>
+            <p>{{ cmp_page.commodity_B.name }}</p>
+            <a href="{% url 'cmp:commodity_cmp_post' commodity_A_id=cmp_page.commodity_A.id commodity_B_id=cmp_page.commodity_B.id attributelist_id=cmp_page.components.id vote=cmp_page.B  attributelist_index=cmp_page.attributelist_index%}" class="btn btn-primary btn-lg">This!!</a>
         </div><!-- col -->
     </div><!-- row -->
 {% endblock content %}

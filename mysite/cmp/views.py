@@ -7,6 +7,7 @@ from cmp.forms import CommodityForm
 from cmp.forms import CategoryForm
 from django.views.generic.list import ListView
 from django.core.exceptions import ObjectDoesNotExist
+import enum
 
 #class CommodityFullSet(Commodity):
 #    """カテゴリ毎の各商品の評価観点と特典のグラフ用データ作成クラス"""
@@ -15,6 +16,7 @@ from django.core.exceptions import ObjectDoesNotExist
 #        self.components = category[0].components.all() #カテゴリのリレーション先構成要素を取得(related_name=components)
 #
 
+POST_KIND = enum.Enum("POSR_KIND", "A B DRAW SKIP")
 
 def category_list(request, cate):
     '''親カテゴリ一覧'''
@@ -39,55 +41,78 @@ def commodities_inf(request, category_id):
                                 context_instance=RequestContext(request))  # その他標準のコンテキスト
 
 
+class CmpPage:
+    """
+    商品比較用ページのクラス
+    """
+    def __init__(self, commodity_A, commodity_B, cmp_lists, components, cmp_lists_idx, attributelist_index):
+        self.commodity_A = commodity_A
+        self.commodity_B = commodity_B
+        self.cmp_lists = cmp_lists
+        self.components = components.attr_list[attributelist_index]
+        self.cmp_lists_idx = cmp_lists_idx
+        self.attributelist_index = attributelist_index
+        self.A = POST_KIND.A.value
+        self.B = POST_KIND.B.value
+        self.DRAW = POST_KIND.DRAW.value
+        self.SKIP = POST_KIND.SKIP.value
 
-def commodity_cmp_make(request, category_id, commodity_id, cmp_lists=None, cmp_lists_idx=None, cmp_cmmodity_id=None):
+
+
+def commodity_cmp_make(request, category_id, commodity_id, cmp_cmmodity_id=None, attributelist_index=None, PAGE_ONLY=False):
     '''
     category_id : 商品カテゴリ
     commodity_id: 商品ID
-    cmp_lists : 商品と比較する他の商品の一覧
-    cmp_lists_idx : cmp_listsのID
     cmp_cmmodity_id : 比較商品のID
     商品比較用のページ作成
     指定商品（A)と比較された回数が少ない商品（B)を取得し、属性ごとに出力させてく
     Bとなる商品が道標であるなら、トータルの回数が少ない商品を選択する
     '''
+
     #指定されたカテゴリを取得（商品の属するカテゴリ）
     category = get_object_or_404(Category, id=category_id)  # 親カテゴリ取得
-
-    #比較対象リストが空の場合は、指定商品に対する比較対象商品IDリスト（比較回数が少ない順）を作成
-    if cmp_lists is None:
-        cmp_lists = category.cmp_lists_make(int(commodity_id))
-        #比較対象は強制的に比較回数が最小のものを選択
-        cmp_lists_idx = 0
-        cmp_cmmodity_id = cmp_lists[cmp_lists_idx][0]
-    
-    #比較対象商品を取得する
-    if cmp_cmmodity_id is None:
-        #比較対象商品のIDが指定されていない場合は、リストの最初のIDを格納
-        if cmp_lists_idx is None:
-            cmp_cmmodity_id =  cmp_lists[0][0]
-        else:
-            cmp_cmmodity_id = cmp_lists[cmp_lists_idx][0]
-
-    #対象商品と比較対象商品を取得
-    print("YYYYYYYYYYYYY%d, %d", int(commodity_id), int(cmp_cmmodity_id))
-    commodity_A = get_object_or_404(Commodity, id=commodity_id) #対象商品を取得
-    commodity_B = get_object_or_404(Commodity, id=cmp_cmmodity_id) #対象商品を取得
 
     #対象商品が属するカテゴリの構成要素を取得
     components = get_object_or_404(Components, category=category) #対象商品を取得
     #構成要素の属性群（ManyToManyField）を、リストに落としこむ
     components.attr_list = components.attributes.all()
+    #指定商品に対する比較対象商品IDリスト（比較回数が少ない順）を作成
 
-    return render_to_response('cmp/commodity_cmp.html',  # 使用するテンプレート
-                                {   'commodity_A': commodity_A,
-                                    'commodity_B':commodity_B,
-                                    'cmp_lists':cmp_lists,
-                                    'components':components,
-                                    'cmp_lists_idx':cmp_lists_idx   },       # テンプレートに渡すデータ
+    cmp_lists = category.cmp_lists_make(int(commodity_id))
+    print(cmp_lists)
+    #比較対象は強制的に比較回数が最小のものを選択
+    cmp_lists_idx = 0
+    if cmp_cmmodity_id is None:
+        cmp_cmmodity_id = cmp_lists[cmp_lists_idx][0]
+    
+    if attributelist_index is None:
+        attributelist_index = 0
+    attributelist_index = int(attributelist_index)
+    if attributelist_index >= len(components.attr_list):
+        if cmp_lists_idx < len(cmp_lists):
+            cmp_lists_idx = cmp_lists_idx + 1
+            cmp_cmmodity_id = cmp_lists[cmp_lists_idx][0]
+        else:
+            return
+
+    #対象商品と比較対象商品を取得
+    commodity_A = get_object_or_404(Commodity, id=int(commodity_id)) #対象商品を取得
+    try:
+        commodity_B = get_object_or_404(Commodity, id=int(cmp_cmmodity_id)) #対象商品を取得
+    except:
+        print(int(cmp_cmmodity_id))
+
+
+
+    cmp_page = CmpPage(commodity_A, commodity_B, cmp_lists, components, cmp_lists_idx, attributelist_index)# テンプレートに渡すデータ
+    if PAGE_ONLY is True:
+        return cmp_page
+    else:
+        return render_to_response('cmp/commodity_cmp.html',  # 使用するテンプレート
+                                {   'cmp_page': cmp_page  },       # テンプレートに渡すデータ
                                 context_instance=RequestContext(request))  # その他標準のコンテキスト
 
-def commodity_cmp_post(request, commodity_A_id, commodity_B_id, attributelist_id, Vote, cmp_lists, pre_cmp_lists_idx=None):
+def commodity_cmp_post(request, commodity_A_id, commodity_B_id, attributelist_id, vote, attributelist_index):
     """
     commodity_Aとcommodity_Bをattributelist_idで
     比較した結果を格納
@@ -115,23 +140,21 @@ def commodity_cmp_post(request, commodity_A_id, commodity_B_id, attributelist_id
         obj1 = "commodity_B"
 
     except ObjectDoesNotExist:
-        print("scoreset dosen't exist !!!!")
         return 
 
-    if vote == "Skip":
+    if int(vote) == POST_KIND.SKIP.value:
         #skipカウンタを更新
         scoreset.skip_cnt = scoreset.skip_cnt + 1
-    elif vote == "Draw":
+    elif int(vote) == POST_KIND.DRAW.value:
         #甲乙つけがたいカウンタを更新
-        print("XXXXXXXXXXXXXXXXXXXXXXXXX")
         scoreset.cannot_cnt = scoreset.cannot_cnt + 1
-    elif vote == "commodity_A":
+    elif int(vote) == POST_KIND.A.value:
         #商品Aにポイントを加算
         if obj1 == "commodity_A":
             scoreset.attr1_score = scoreset.attr1_score + 1
         elif obj2 == "commodity_A":
             scoreset.attr2_score = scoreset.attr2_score + 1
-    elif vote == "commodity_B":
+    elif int(vote) == POST_KIND.B.value:
         if obj1 == "commodity_B":
             scoreset.attr1_score = scoreset.attr1_score + 1
         elif obj2 == "commodity_B":
@@ -141,13 +164,14 @@ def commodity_cmp_post(request, commodity_A_id, commodity_B_id, attributelist_id
 
     #DB更新
     scoreset.save()
+
     #比較用のページを作成
-    if len(cmp_lists) > pre_cmp_lists_idx + 1:
-        cmp_lists_idx = pre_cmp_lists_idx + 1
-    else:
-        cmp_lists_idx = None
-        cmp_lists = None
-    return commodity_cmp_make(request, commodity_A.category.id, commodity_A_id, cmp_lists, cmp_lists_idx, cmp_cmmodity_id=None)
+    attributelist_index = int(attributelist_index) + 1
+    cmp_page  = commodity_cmp_make(request, commodity_A.category.id, commodity_A_id, commodity_B_id, attributelist_index, True)
+    return render_to_response('cmp/commodity_cmp.html',  # 使用するテンプレート
+                                {   'cmp_page': cmp_page  },       # テンプレートに渡すデータ
+                                context_instance=RequestContext(request))  # その他標準のコンテキスト
+
 
 def category_edit(request, category_id=None):
     '''カテゴリの編集'''
