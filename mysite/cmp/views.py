@@ -64,9 +64,11 @@ def commodity_cmp_make(request, category_id, commodity_id, cmp_cmmodity_id=None,
     category_id : 商品カテゴリ
     commodity_id: 商品ID
     cmp_cmmodity_id : 比較商品のID
+    attributelist_index : 属性リストのインデックス
+    PAGE_ONLY : True 情報のみを作成する。False htmlを返す
     商品比較用のページ作成
     指定商品（A)と比較された回数が少ない商品（B)を取得し、属性ごとに出力させてく
-    Bとなる商品が道標であるなら、トータルの回数が少ない商品を選択する
+    比較する商品が指定されている場合は、属性を切り替える
     '''
 
     #指定されたカテゴリを取得（商品の属するカテゴリ）
@@ -79,7 +81,6 @@ def commodity_cmp_make(request, category_id, commodity_id, cmp_cmmodity_id=None,
     #指定商品に対する比較対象商品IDリスト（比較回数が少ない順）を作成
 
     cmp_lists = category.cmp_lists_make(int(commodity_id))
-    print(cmp_lists)
     #比較対象は強制的に比較回数が最小のものを選択
     cmp_lists_idx = 0
     if cmp_cmmodity_id is None:
@@ -90,6 +91,7 @@ def commodity_cmp_make(request, category_id, commodity_id, cmp_cmmodity_id=None,
     attributelist_index = int(attributelist_index)
     if attributelist_index >= len(components.attr_list):
         if cmp_lists_idx < len(cmp_lists):
+            attributelist_index = 0
             cmp_lists_idx = cmp_lists_idx + 1
             cmp_cmmodity_id = cmp_lists[cmp_lists_idx][0]
         else:

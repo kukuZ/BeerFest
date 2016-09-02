@@ -81,6 +81,7 @@ class Commodity(models.Model):
     category = models.ForeignKey(Category, related_name='commodities')
     name = models.CharField(max_length=255)
     text = models.TextField()
+    image = models.ImageField(upload_to='Commodity/', blank=True, null=True)  # upload_toは指定必須で、MEDIA_ROOT以下の同名ディレクトリにファイルがアップロードされる
 
     # 外部リンク用
     link = models.CharField(max_length=255)

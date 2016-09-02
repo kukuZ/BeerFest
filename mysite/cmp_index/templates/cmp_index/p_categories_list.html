@@ -17,11 +17,13 @@
         {% for p_category in p_categories %}
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                 {% if p_category.disp_mode1 == "push" %}
+                <img src="{{ MEDIA_ROOT }}{{ p_category.image.url }}">
                     <h2><a href="{% url 'cmp:commodities_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a></h2>
                 {% endif %}
             </div><!-- col -->
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                 {% if p_category.disp_mode1 == "pull" %}
+                    <img src="{{ MEDIA_ROOT }}{{ p_category.image.url }}">
                     <h2><a href="{% url 'cmp:commodities_inf' category_id=p_category.category_id %}">{{ p_category.name }}</a></h2>
                 {% endif %}
             </div><!-- col -->
