@@ -13,6 +13,7 @@ setup(
     [
         'Django==1.8',
         'django-bootstrap-form==3.2',
+        'pillow',
     ],
     packages=find_packages(),
     test_suite = "BeerFest",
