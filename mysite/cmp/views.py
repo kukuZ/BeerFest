@@ -41,7 +41,6 @@ def commodities_inf(request, category_id):
         else:
             commodities[i].disp_mode1 = "right"
 
-
     return render_to_response('cmp/commodity_detail_list.html',  # 使用するテンプレート
                                 {'category': category, 'commodities':commodities,},       # テンプレートに渡すデータ
                                 context_instance=RequestContext(request))  # その他標準のコンテキスト
@@ -109,8 +108,6 @@ def commodity_cmp_make(request, category_id, commodity_id, cmp_cmmodity_id=None,
         commodity_B = get_object_or_404(Commodity, id=int(cmp_cmmodity_id)) #対象商品を取得
     except:
         print(int(cmp_cmmodity_id))
-
-
 
     cmp_page = CmpPage(commodity_A, commodity_B, cmp_lists, components, cmp_lists_idx, attributelist_index)# テンプレートに渡すデータ
     if PAGE_ONLY is True:
