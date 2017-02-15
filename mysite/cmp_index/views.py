@@ -9,12 +9,12 @@ def p_category_list(request):
     #return HttpResponse('カテゴリ')
 #    p_categories = P_Category.objects.all().order_by('id')
     p_categories = P_Category.objects.filter(last_flg=1).order_by('name')
-    #html側での表示用の変数：段違いに表示させるためのグリッドモード設定 ex.(col-sx-{{disp_mode1}}-4
+    #html側での表示用の変数：段違いに表示させるためのグリッドモード設定 
     for i in range(len(p_categories)):
         if(i % 2 == 0):
-            p_categories[i].disp_mode1 = "push"
+            p_categories[i].disp_mode1 = "left"
         else:
-            p_categories[i].disp_mode1 = "pull"
+            p_categories[i].disp_mode1 = "right"
 
     return render_to_response('cmp_index/p_categories_list.html',  # 使用するテンプレート
                                 {'p_categories': p_categories},       # テンプレートに渡すデータ

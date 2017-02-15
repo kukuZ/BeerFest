@@ -7,10 +7,69 @@
     table {
         margin-top: 400px;
     }
+    #graph
+    {
+        width : 400px;
+        height: 300px;
+        margin: 20px auto;
+    }
 </style>
+<script type="text/javascript">
+(function basic_radar(container) {
+var ticks = [
+    [0, "項目1"],
+    [1, "項目2"],
+    [2, "項目3"],
+    [3, "項目4"],
+    [4, "項目5"],
+    [5, "項目6"],
+];
+ 
+var data = new Array();
+data.push({label: "データ1",
+data: [
+    [0, 40],
+    [1, 44],
+    [2, 50],
+    [3, 100],
+    [4, 12],
+    [5, 66],
+]})
+data.push({label: "データ2",
+data: [
+    [0, 14],
+    [1, 24],
+    [2, 31],
+    [3, 55],
+    [4, 66],
+    [5, 81],
+]})
+ 
+// console.log(data);
+var graph = Flotr.draw(container, data, {
+        radar: {
+            show: true
+        },
+        grid: {
+            circular: true,
+            minorHorizontalLines: true
+        },
+        yaxis: {
+            min: 0,
+            max: 100, // 最大値
+            minorTickFreq: 1
+        },
+        xaxis: {
+            ticks: ticks
+        }
+    });
+})(document.getElementById("graph"));
+ </script>
+
 {% endblock %}
 
 {% block content %}
+
 <h3 class="page-header">{{ category.name }}</h3>
 <table class="table table-striped table-bordered">
     <thead>
@@ -43,6 +102,35 @@
         {% endfor %}
     </tbody>
 </table>
+<div class="container">
+    {% for commodity in commodities %}
+        <div style="text-align:center;">
+            <div class="row">
+                <div class="col-md-2 col-lg-2"></div>
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    {% if commodity.disp_mode1 == "left" %}
+                        {% comment %}
+                        <img class="img-responsive" src="{{ MEDIA_ROOT }}{{ commodity.image.url }}">
+                        {% endcomment %}
+                        <h2>{{ commodity.name }}</h2>
+                        <a href="{% url 'cmp:commodity_cmp_make' category_id=category.id commodity_id=commodity.id %}" class="btn btn-warning" url="">Compar!!</a>
+                    {% endif %}
+                </div><!-- col -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 ">
+                    {% if commodity.disp_mode1 == "right" %}
+                        {% comment %}
+                        <img class="img-responsive" src="{{ MEDIA_ROOT }}{{ p_category.image.url }}">
+                        {% endcomment %}
+                        <h2>{{ commodity.name }}</h2>
+                        <a href="{% url 'cmp:commodity_cmp_make' category_id=category.id commodity_id=commodity.id %}" class="btn btn-warning" url="">Compar!!</a>
+                    {% endif %}
+                </div><!-- col -->
+                <div class="col-md-2 col-lg-2"></div>
+            </div><!-- row -->
+        </div>
+    {% endfor %}
+</div>
+<div id="graph"></div>
     <a href="{% url 'cmp:commodity_add' category_id=category.id %}" class="btn btn-default btn-sm">商品編集</a>
 {% endblock content %}
 

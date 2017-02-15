@@ -1,0 +1,3 @@
+[submodule "mysite/static/js/Flotr2"]
+	path = mysite/static/js/Flotr2
+	url = git@github.com:HumbleSoftware/Flotr2.git

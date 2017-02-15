@@ -35,6 +35,12 @@ def commodities_inf(request, category_id):
     for i in range(len(commodities)):
         #商品ごとの属性とその構成を取得し、インスタンスとして追加する
         commodities[i].components, commodities[i].attributes = commodities[i].attrscore_get()
+        #表示用のスタイル指定
+        if(i % 2 == 0):
+            commodities[i].disp_mode1 = "left"
+        else:
+            commodities[i].disp_mode1 = "right"
+
 
     return render_to_response('cmp/commodity_detail_list.html',  # 使用するテンプレート
                                 {'category': category, 'commodities':commodities,},       # テンプレートに渡すデータ
