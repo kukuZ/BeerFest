@@ -1,46 +1,28 @@
-function basic_radar(container)
+function basic_radar(container, param)
 {
     // Fill series s1 and s2.
+    var data_list = [];
+    var ticks_list = [];
+    for(var i = 0; i < param.length; i++)
+    {
+        var tmp = [i, param[i][1]];
+        var tmp2 = [i, param[i][0]];
+        data_list.push(tmp);
+        ticks_list.push(tmp2);
+    }
     var
     s1 =
     {
-        label: 'Actual',
-        data: [
-            [0, 3],
-            [1, 8],
-            [2, 5],
-            [3, 5],
-            [4, 3],
-            [5, 9]
-        ]
-    },
-    s2 =
-    {
-        label: 'Target',
-        data: [
-            [0, 8],
-            [1, 7],
-            [2, 8],
-            [3, 2],
-            [4, 4],
-            [5, 7]
-        ]
-    },
-    graph, ticks;
+        data: data_list 
+    };
+    var graph;
+    var ticks;
 
     // Radar Labels
-    ticks =
-    [
-        [0, "Statutory"],
-        [1, "External"],
-        [2, "Videos"],
-        [3, "Yippy"],
-        [4, "Management"],
-        [5, "oops"]
-    ];
+    ticks = ticks_list;
 
     // Draw the graph.
-    graph = Flotr.draw(container, [s1, s2],
+    graph = Flotr.draw(container, [s1],
             {
                 radar:
                 {
