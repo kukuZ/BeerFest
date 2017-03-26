@@ -4,104 +4,25 @@
 
 {% block extrahead %}
 <style>
-    table {
+    table
+    {
         margin-top: 400px;
     }
-    #graph
+    {% for commodity in commodities %}
+    #graph{{ commodity.id }}
     {
-        width : 400px;
+        width : 500px;
         height: 300px;
-        margin: 20px auto;
+        margin: 1em auto;
     }
+    {% endfor %}
 </style>
-<script type="text/javascript">
-(function basic_radar(container) {
-var ticks = [
-    [0, "項目1"],
-    [1, "項目2"],
-    [2, "項目3"],
-    [3, "項目4"],
-    [4, "項目5"],
-    [5, "項目6"],
-];
- 
-var data = new Array();
-data.push({label: "データ1",
-data: [
-    [0, 40],
-    [1, 44],
-    [2, 50],
-    [3, 100],
-    [4, 12],
-    [5, 66],
-]})
-data.push({label: "データ2",
-data: [
-    [0, 14],
-    [1, 24],
-    [2, 31],
-    [3, 55],
-    [4, 66],
-    [5, 81],
-]})
- 
-// console.log(data);
-var graph = Flotr.draw(container, data, {
-        radar: {
-            show: true
-        },
-        grid: {
-            circular: true,
-            minorHorizontalLines: true
-        },
-        yaxis: {
-            min: 0,
-            max: 100, // 最大値
-            minorTickFreq: 1
-        },
-        xaxis: {
-            ticks: ticks
-        }
-    });
-})(document.getElementById("graph"));
- </script>
-
 {% endblock %}
 
 {% block content %}
 
 <h3 class="page-header">{{ category.name }}</h3>
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>カテゴリ</th>
-            <th>name</th>
-            <th>text</th>
-            <th>attr</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for commodity in commodities %}
-        <tr>
-            <td>{{ commodity.category }}</td>
-            <td>{{ commodity.name }}</td>
-            <td>{{ commodity.text }}</td>
-            <td>
-            {% for attribute in commodity.attributes %}
-                {{ attribute}}
-                :
-                {{attribute.score}}
-                <br>
-            {% endfor %}
-            </td>
-            <td>
-                <a href="{% url 'cmp:commodity_cmp_make' category_id=category.id commodity_id=commodity.id %}" class="btn btn-warning" url="">Compar!!</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
 <div class="container">
     {% for commodity in commodities %}
         <div style="text-align:center;">
@@ -114,6 +35,17 @@ var graph = Flotr.draw(container, data, {
                         {% endcomment %}
                         <h2>{{ commodity.name }}</h2>
                         <a href="{% url 'cmp:commodity_cmp_make' category_id=category.id commodity_id=commodity.id %}" class="btn btn-warning" url="">Compar!!</a>
+                        <div id="graph{{ commodity.id }}"></div>
+                        <script type="text/javascript">
+                            var param = [];
+                            {% for attribute in commodity.attributes %}
+                                var tmp = [];
+                                tmp.push("{{ attribute}}");
+                                tmp.push({{attribute.score}});
+                                param.push(tmp)
+                            {% endfor %}
+                            basic_radar(document.getElementById("graph{{ commodity.id }}"), param);
+                        </script>
                     {% endif %}
                 </div><!-- col -->
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 ">
@@ -123,6 +55,17 @@ var graph = Flotr.draw(container, data, {
                         {% endcomment %}
                         <h2>{{ commodity.name }}</h2>
                         <a href="{% url 'cmp:commodity_cmp_make' category_id=category.id commodity_id=commodity.id %}" class="btn btn-warning" url="">Compar!!</a>
+                        <div id="graph{{ commodity.id }}"></div>
+                        <script type="text/javascript">
+                            var param = [];
+                            {% for attribute in commodity.attributes %}
+                                var tmp = [];
+                                tmp.push("{{ attribute}}");
+                                tmp.push({{attribute.score}});
+                                param.push(tmp)
+                            {% endfor %}
+                            basic_radar(document.getElementById("graph{{ commodity.id }}"), param);
+                        </script>
                     {% endif %}
                 </div><!-- col -->
                 <div class="col-md-2 col-lg-2"></div>
@@ -130,7 +73,6 @@ var graph = Flotr.draw(container, data, {
         </div>
     {% endfor %}
 </div>
-<div id="graph"></div>
     <a href="{% url 'cmp:commodity_add' category_id=category.id %}" class="btn btn-default btn-sm">商品編集</a>
 {% endblock content %}
 
